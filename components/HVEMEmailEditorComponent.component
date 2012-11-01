@@ -30,7 +30,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
     controller="HVEMEmailEditorCompCtrl" allowDML="true">
     <apex:includeScript value="/support/console/26.0/integration.js" />
     <apex:includeScript value="{!URLFOR($Resource.HVEMCKEditor,'/ckeditor/ckeditor.js')}" />
-    <style>
+    <style  type="text/css">
         .apexp .bPageBlock.apexDefaultPageBlock .pbBody .pbSubheader .showListButton,.apexp .bPageBlock.apexDefaultPageBlock .pbBody .pbSubheader .hideListButton {
             background: url("{!URLFOR($Resource.HVEMStaticResource,'/HVEM_StaticResource/Images/sprite.png')}") -65px -7px no-repeat transparent;
         }
@@ -448,7 +448,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
                             <apex:commandButton id="showOptionsId"
                                     rendered="{!If(enableChangeCaseStatus || isSuperUser || allowSendBackToQueue, true,false)}"
                                     disabled="{!isUnderApproval}"
-                                    value="▼"
+                                    value="â¼"
                                     onclick="showOptions();"
                                     onblur="hideDropDownOptions();"
                                     oncomplete="return false;"
@@ -529,192 +529,166 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
         <apex:inputHidden value="{!isNoCustomError}" id="isNoCustomError" />
     </apex:outputPanel>
     <!-- Loading image to be used -->
-    <div style="position: absolute; top: 150px; left: 200px;"><apex:actionStatus id="loadingStatus" onstart="freezeBackground();"
-        onstop="unFreezeBackground();">
-    </apex:actionStatus></div>
-    <script>
-            function displayContent(templateType,knowledgeArticleId,frameSourceId, frameSourceName, articleName, articleTitle, articleSummary){
-                insertArticleContentAF(templateType,knowledgeArticleId,frameSourceId, frameSourceName, articleName, articleTitle, articleSummary);
-            }
+    <div style="position: absolute; top: 150px; left: 200px;">
+        <apex:actionStatus id="loadingStatus" onstart="freezeBackground();" onstop="unFreezeBackground();"></apex:actionStatus>
+    </div>
+    <script type="text/javascript">
+        function displayContent(templateType,knowledgeArticleId,frameSourceId, frameSourceName, articleName, articleTitle, articleSummary){
+            insertArticleContentAF(templateType,knowledgeArticleId,frameSourceId, frameSourceName, articleName, articleTitle, articleSummary);
+        }
 
-            function loadEditor(){
-                var templateType = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:templateType').value;
-                var editorTextValue = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:textValue').value;
-                var editorElement = document.getElementById('idMainEmailBody');
-                var editorValue = editorElement.value ;
-
-                if(templateType == 'text'){
-                    editorTextValue = editorTextValue.replace(/<br\/>/g, "\n");
-                    var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,true);
-                    decoded = decoded.replace('<![CDATA[', '');
-                    decoded = decoded.replace(']]>', '');
-                    var beforeString = editorElement.value.substring(0,editorElement.selectionStart);
-                    var afterString = editorElement.value.substring(editorElement.selectionStart,editorValue.length);
-                    editorElement.value =   beforeString + decoded + '  ' + afterString;
-                }else if(templateType == 'custom'){
-                    var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,false);
-                    decoded = decoded.replace('<![CDATA[', '');
-                    decoded = decoded.replace(']]>', '');
-                    var element = CKEDITOR.dom.element.createFromHtml('<table><tr><td>' + decoded + '</table></tr></td>');
-                    CKEDITOR.instances.idMainEmailBody.insertElement( element );
-                }else{
-                    editorTextValue = editorTextValue.replace(/<br\/>/g, "\n");
-                    var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,true);
-                    decoded = decoded.replace('<![CDATA[', '');
-                    decoded = decoded.replace(']]>', '');
-                    var beforeString = editorElement.value.substring(0,editorElement.selectionStart);
-                    var afterString = editorElement.value.substring(editorElement.selectionStart,editorValue.length);
-                    editorElement.value =   beforeString + decoded + '  ' + afterString;
-                }
-            }
-
-            var isTemplateDeleted = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:TemplateDeleted').value;
-            var editorHtmlValue = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:htmlValue').value;
+        function loadEditor(){
             var templateType = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:templateType').value;
             var editorTextValue = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:textValue').value;
-            var previousEmailTemplate = templateType;
-            var isHVEMUser = '{!activeUser.HVEM_User__c}';
-            var inConsole = testIsInConsole();
-            if(isHVEMUser == 'true' && inConsole == 1){
-                if(templateType == 'custom'){
-                    var editor = CKEDITOR.replace( 'nameMainEmailBody' );
-                    CKEDITOR.instances.idMainEmailBody.setData('');
-                    // Decode the now encoded text
-                    var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,false);
-                    decoded = decoded.replace('<![CDATA[', '');
-                    decoded = decoded.replace(']]>', '');
-                    decoded = trim(decoded.replace( '<p>', '' ));
-                    decoded = trim(decoded.replace( '</p>', '' ));
-                    CKEDITOR.instances.idMainEmailBody.setData(decoded);
-                }else{
-                    editorTextValue = editorTextValue.replace(/<br\/>/g, "\n");
-                    var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,true);
-                    decoded = decoded.replace('<![CDATA[', '');
-                    decoded = decoded.replace(']]>', '');
-                    if(inConsole == 1){
-                        document.getElementById('idMainEmailBody').value = editorTextValue;
-                    }
-                }
-           }
-          //changes
-            window.onload=function(){
-                if(inConsole == 1 && isHVEMUser == 'true'){
-                    var templateSelectList = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:emailTemplateId');
+            var editorElement = document.getElementById('idMainEmailBody');
+            var editorValue = editorElement.value ;
 
-                    for(var i=(templateSelectList.options.length - 1);i>=0;i--){
-                         if(templateSelectList .options[i].disabled == true){
-                            templateSelectList .options[i].className = 'Fontbolder';
-                        }
-                    }
-                   //Phase - II - Email Editor Component - START
-                   var saveLink = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:SaveId');
-                   var discardLink = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:DiscardId');
-                   if('{!configOptions.Allow_Drafts__c}' == 'true'){
-                       if('{!isActiveStatus}' != 'true' ){
-                           discardLink.style.display = 'none';
-                           document.getElementById('discardChangesSpan').style.display='block';
-                       }
-                  }
-                   if('{!isUnderApproval}' == 'true'){
-                       if('{!configOptions.Allow_Drafts__c}' == 'true'){
-                           discardLink.style.display = 'none';
-                           document.getElementById('discardChangesSpan').style.display='block';
-                      }
+            if(templateType == 'text'){
+                editorTextValue = editorTextValue.replace(/<br\/>/g, "\n");
+                var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,true);
+                decoded = decoded.replace('<![CDATA[', '');
+                decoded = decoded.replace(']]>', '');
+                var beforeString = editorElement.value.substring(0,editorElement.selectionStart);
+                var afterString = editorElement.value.substring(editorElement.selectionStart,editorValue.length);
+                editorElement.value =   beforeString + decoded + '  ' + afterString;
+            }else if(templateType == 'custom'){
+                var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,false);
+                decoded = decoded.replace('<![CDATA[', '');
+                decoded = decoded.replace(']]>', '');
+                var element = CKEDITOR.dom.element.createFromHtml('<table><tr><td>' + decoded + '</table></tr></td>');
+                CKEDITOR.instances.idMainEmailBody.insertElement( element );
+            }else{
+                editorTextValue = editorTextValue.replace(/<br\/>/g, "\n");
+                var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,true);
+                decoded = decoded.replace('<![CDATA[', '');
+                decoded = decoded.replace(']]>', '');
+                var beforeString = editorElement.value.substring(0,editorElement.selectionStart);
+                var afterString = editorElement.value.substring(editorElement.selectionStart,editorValue.length);
+                editorElement.value =   beforeString + decoded + '  ' + afterString;
+            }
+        }
 
-                   }else if('{!isUnderApproval}' == 'false'){}
-                   if(templateType == 'custom' && '{!isUnderApproval}' == 'true'){
-                       CKEDITOR.instances.idMainEmailBody.setReadOnly(true);
-                   }else if('{!isUnderApproval}' == 'true'){
-                       document.getElementById('idMainEmailBody').disabled = true;
-                   }
-
-                //Phase - II - Email Editor Component - END
+        var isTemplateDeleted = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:TemplateDeleted').value;
+        var editorHtmlValue = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:htmlValue').value;
+        var templateType = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:templateType').value;
+        var editorTextValue = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:textValue').value;
+        var previousEmailTemplate = templateType;
+        var isHVEMUser = '{!activeUser.HVEM_User__c}';
+        var inConsole = testIsInConsole();
+        if(isHVEMUser == 'true' && inConsole == 1){
+            if(templateType == 'custom'){
+                var editor = CKEDITOR.replace( 'nameMainEmailBody' );
+                CKEDITOR.instances.idMainEmailBody.setData('');
+                // Decode the now encoded text
+                var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,false);
+                decoded = decoded.replace('<![CDATA[', '');
+                decoded = decoded.replace(']]>', '');
+                decoded = trim(decoded.replace( '<p>', '' ));
+                decoded = trim(decoded.replace( '</p>', '' ));
+                CKEDITOR.instances.idMainEmailBody.setData(decoded);
+            }else{
+                editorTextValue = editorTextValue.replace(/<br\/>/g, "\n");
+                var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,true);
+                decoded = decoded.replace('<![CDATA[', '');
+                decoded = decoded.replace(']]>', '');
+                if(inConsole == 1){
+                    document.getElementById('idMainEmailBody').value = editorTextValue;
                 }
             }
+        }
+        //changes
+        window.onload=function(){
+            if(inConsole == 1 && isHVEMUser == 'true'){
+                var templateSelectList = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:emailTemplateId');
 
+                for(var i=(templateSelectList.options.length - 1);i>=0;i--){
+                     if(templateSelectList .options[i].disabled == true){
+                        templateSelectList .options[i].className = 'Fontbolder';
+                    }
+                }
+                //Phase - II - Email Editor Component - START
+                var saveLink = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:SaveId');
+                var discardLink = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:DiscardId');
+                if('{!configOptions.Allow_Drafts__c}' == 'true'){
+                    if('{!isActiveStatus}' != 'true' ){
+                        discardLink.style.display = 'none';
+                        document.getElementById('discardChangesSpan').style.display='block';
+                    }
+               }
+               if('{!isUnderApproval}' == 'true'){
+                   if('{!configOptions.Allow_Drafts__c}' == 'true'){
+                       discardLink.style.display = 'none';
+                       document.getElementById('discardChangesSpan').style.display='block';
+                   }
+               }else if('{!isUnderApproval}' == 'false'){
+               }
+               if(templateType == 'custom' && '{!isUnderApproval}' == 'true'){
+                   CKEDITOR.instances.idMainEmailBody.setReadOnly(true);
+               }else if('{!isUnderApproval}' == 'true'){
+                   document.getElementById('idMainEmailBody').disabled = true;
+               }
+
+            //Phase - II - Email Editor Component - END
+            }
+        }
     </script>
 
-    <script>
-          function insertURL(articleTitleForUrl,url,type){
-               if(type == 'url'){
-                        if(templateType == 'text'){
-                            var editorElement = document.getElementById('idMainEmailBody');
-                            var editorValue = editorElement.value;
-                            var beforeString =editorValue.substring(0,editorElement.selectionStart);
-                            var afterString =editorValue.substring(editorElement.selectionStart,editorValue.length);
-                            editorElement.value =   beforeString + url + '  ' + afterString;
-                        }else if(templateType == 'custom'){
-                            var element = CKEDITOR.dom.element.createFromHtml( '<a style="margin-right:10px;" href="' + url + ' " target="__blank" >' + articleTitleForUrl +  '</a> ' );
-                            CKEDITOR.instances.idMainEmailBody.insertElement(element);
-                        }else{
-                            var editorElement = document.getElementById('idMainEmailBody');
-                            var editorValue = editorElement.value ;
-                            var beforeString =editorValue.substring(0,editorElement.selectionStart);
-                            var afterString =editorValue.substring(editorElement.selectionStart,editorValue.length);
-                            editorElement.value =   beforeString + url + '  ' +  afterString;
-                        }
-                   }
-                   if(type == 'content')
-                     {
-                        if(templateType == 'text'){
-                            var editorElement = document.getElementById('idMainEmailBody');
-                            var editorValue = editorElement.value;
-                            var beforeString = editorValue.substring(0,editorElement.selectionStart);
-                            var afterString = editorValue.substring(editorElement.selectionStart,editorValue.length);
-                            editorElement.value =   beforeString + url + '  ' + afterString;
-                        }else if(templateType == 'custom'){
-                            CKEDITOR.instances.idMainEmailBody.insertHtml('<p>' +  ' ' + url +  '</p> ' );
-                        }else{
-                            var editorElement = document.getElementById('idMainEmailBody');
-                            var editorValue = editorElement.value ;
-                            var beforeString =editorValue.substring(0,editorElement.selectionStart);
-                            var afterString =editorValue.substring(editorElement.selectionStart,editorValue.length);
-                            editorElement.value =   beforeString + url + '  ' +  afterString;
-                        }
-                   }
+    <script type="text/javascript">
+        function insertURL(articleTitleForUrl,url,type){
+            if(type == 'url'){
+                if(templateType == 'text'){
+                    var editorElement = document.getElementById('idMainEmailBody');
+                    var editorValue = editorElement.value;
+                    var beforeString =editorValue.substring(0,editorElement.selectionStart);
+                    var afterString =editorValue.substring(editorElement.selectionStart,editorValue.length);
+                    editorElement.value =   beforeString + url + '  ' + afterString;
+                }else if(templateType == 'custom'){
+                    var element = CKEDITOR.dom.element.createFromHtml( '<a style="margin-right:10px;" href="' + url + ' " target="__blank" >' + articleTitleForUrl +  '</a> ' );
+                    CKEDITOR.instances.idMainEmailBody.insertElement(element);
+                }else{
+                    var editorElement = document.getElementById('idMainEmailBody');
+                    var editorValue = editorElement.value ;
+                    var beforeString =editorValue.substring(0,editorElement.selectionStart);
+                    var afterString =editorValue.substring(editorElement.selectionStart,editorValue.length);
+                    editorElement.value =   beforeString + url + '  ' +  afterString;
+                }
+            }
+            if(type == 'content'){
+                if(templateType == 'text'){
+                    var editorElement = document.getElementById('idMainEmailBody');
+                    var editorValue = editorElement.value;
+                    var beforeString = editorValue.substring(0,editorElement.selectionStart);
+                    var afterString = editorValue.substring(editorElement.selectionStart,editorValue.length);
+                    editorElement.value =   beforeString + url + '  ' + afterString;
+                }else if(templateType == 'custom'){
+                    CKEDITOR.instances.idMainEmailBody.insertHtml('<p>' +  ' ' + url +  '</p> ' );
+                }else{
+                    var editorElement = document.getElementById('idMainEmailBody');
+                    var editorValue = editorElement.value ;
+                    var beforeString =editorValue.substring(0,editorElement.selectionStart);
+                    var afterString =editorValue.substring(editorElement.selectionStart,editorValue.length);
+                    editorElement.value =   beforeString + url + '  ' +  afterString;
+                }
+            }
+        }
 
-         }
+        /** Script to show and hide drop down button */
+        var isMouseOver = false;
+        var isoptionsVisible = 'false';
+        var isActionComplete = 'false';
 
-
-          /** Script to show and hide drop down button */
-
-         var isMouseOver = false;
-         var isoptionsVisible = 'false';
-         var isActionComplete = 'false';
-
-         function showOptions(){
-             if(inConsole == 1){
-             if(isoptionsVisible ==  'false'){
-                  if({!enableChangeCaseStatus}){
-                    document.getElementById('DivId').style.display='block';
-                    if(document.getElementById('changeCaseId').className == 'btnhidden')
-                        document.getElementById('changeCaseId').className = 'btnvisible';
-                    else if(document.getElementById('changeCaseId').className == 'btnvisible')
-                        document.getElementById('changeCaseId').className = 'btnhidden';
-                  }else{
-                       document.getElementById('changeCaseId').className = 'btnhidden';
-                   }
-
-                   if({!isSuperUser}){
-                         document.getElementById('DivId').style.display='block';
-                 if(document.getElementById('superUserApproval').className == 'btnhidden')
-                     document.getElementById('superUserApproval').className = 'btnvisible';
-                 else if(document.getElementById('superUserApproval').className == 'btnvisible')
-                     document.getElementById('superUserApproval').className = 'btnhidden';
-                   }else{
-                       document.getElementById('superUserApproval').className = 'btnhidden';
-                   }
-                   isoptionsVisible = 'true';
-                   isActionComplete = 'false';
-
-               }else if(isoptionsVisible == 'true'){
-                     document.getElementById('DivId').style.display='none';
-                     isoptionsVisible = 'false';
-                     isActionCalled = 'false';
-                     isActionComplete = 'false';
-               }
-             }
-         }
+        function showOptions(){
+            if(isoptionsVisible ==  'false'){
+               document.getElementById('DivId').style.display='block';
+               isoptionsVisible = 'true';
+               isActionComplete = 'false';
+            }else if(isoptionsVisible == 'true'){
+                document.getElementById('DivId').style.display='none';
+                isoptionsVisible = 'false';
+                isActionCalled = 'false';
+                isActionComplete = 'false';
+            }
+        }
 
         function hideOptions(type){
             if(type == 'review'){
@@ -733,32 +707,30 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
             document.getElementById('DivId').style.display='none';
         }
 
-         function hideDropDownOptions(){
-             if(isActionComplete == 'false' && isMouseOver == 'false'){
-                 document.getElementById('DivId').style.display='none';
-                 isActionComplete = 'true';
-                 isoptionsVisible = 'false';
-             }
-         }
-
-         function populateMouseVar(type,CaseId){
-             if(inConsole == 1){
-                 if(type == 'out'){
-                     isMouseOver = 'false';
-                        document.getElementById(CaseId).className='removeHighLight';
-                 }else if(type == 'in'){
-                     isMouseOver = 'true';
-                        document.getElementById(CaseId).className='highLightSelection';
-                 }
-             }
-         }
-        function saveDiscardLink(){
-                document.getElementById('discardChangesSpan').style.display='none';
-                var discardLink = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:DiscardId');
-                discardLink.style.display = 'block';
-                return false;
+        function hideDropDownOptions(){
+            if(isActionComplete == 'false' && isMouseOver == 'false'){
+                document.getElementById('DivId').style.display='none';
+                isActionComplete = 'true';
+                isoptionsVisible = 'false';
+            }
         }
 
-
+        function populateMouseVar(type,CaseId){
+            if(inConsole == 1){
+                if(type == 'out'){
+                    isMouseOver = 'false';
+                        document.getElementById(CaseId).className='removeHighLight';
+                }else if(type == 'in'){
+                    isMouseOver = 'true';
+                    document.getElementById(CaseId).className='highLightSelection';
+                }
+            }
+        }
+        function saveDiscardLink(){
+            document.getElementById('discardChangesSpan').style.display='none';
+            var discardLink = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:DiscardId');
+            discardLink.style.display = 'block';
+            return false;
+        }
     </script>
 </apex:component>
