@@ -64,8 +64,6 @@ private class HVEMEmailEditorCompCtrlTestClass {
 
     public static void setupDataInit() {
         User u = [SELECT id,name FROM User WHERE id = :userInfo.getUserid()];
-        u.HVEM_User__c = true;
-        update u;
         contactInstance = new Contact(LastName='TestClass', Email = 'testclasses@persistent.co.i');
         insert contactInstance;
         caseInstance = new Case(status='New',Origin='Phone',contactId=contactInstance.id);
@@ -438,8 +436,6 @@ private class HVEMEmailEditorCompCtrlTestClass {
 
     public static void setUpDataForConstructorElse(){
         User u = [SELECT id,name FROM User WHERE id = :userInfo.getUserid()];
-        u.HVEM_User__c = true;
-        update u;
         contactInstance = new Contact(LastName='TestClass', Email = 'testclasses@persistent.co.i');
         insert contactInstance;
 
@@ -497,8 +493,6 @@ private class HVEMEmailEditorCompCtrlTestClass {
     }
     public static void setUpDataForSelectedTempNull(){
         User u = [SELECT id,name FROM User WHERE id = :userInfo.getUserid()];
-        u.HVEM_User__c = true;
-        update u;
         contactInstance = new Contact(LastName='TestClass', Email = 'testclasses@persistent.co.i');
         insert contactInstance;
 
@@ -576,8 +570,6 @@ private class HVEMEmailEditorCompCtrlTestClass {
    }
    public static void setUpDataConfigNullInConstructor(){
         User u = [SELECT id,name FROM User WHERE id = :userInfo.getUserid()];
-        u.HVEM_User__c = true;
-        update u;
         contactInstance = new Contact(LastName='TestClass', Email = 'abcd@xyz.com');
         insert contactInstance;
 
@@ -637,8 +629,6 @@ private class HVEMEmailEditorCompCtrlTestClass {
     }
     public static void setUpDataForConstructor(){
         User u = [SELECT id,name FROM User WHERE id = :userInfo.getUserid()];
-        u.HVEM_User__c = true;
-        update u;
         contactInstance = new Contact(LastName='TestClass', Email = 'abcd@xyz.com');
         insert contactInstance;
 
@@ -683,8 +673,6 @@ private class HVEMEmailEditorCompCtrlTestClass {
 
     public static void dataForNullTextBody(){
         User u = [SELECT id,name FROM User WHERE id = :userInfo.getUserid()];
-        u.HVEM_User__c = true;
-        update u;
         contactInstance = new Contact(LastName='TestClass', Email = 'abcd@xyz.com');
         insert contactInstance;
 
@@ -721,8 +709,6 @@ private class HVEMEmailEditorCompCtrlTestClass {
 
     public static void dataForHtmlBodyNotNull(){
         User u = [SELECT id,name FROM User WHERE id = :userInfo.getUserid()];
-        u.HVEM_User__c = true;
-        update u;
         contactInstance = new Contact(LastName='TestClass', Email = 'abcd@xyz.com');
         insert contactInstance;
 
@@ -759,8 +745,6 @@ private class HVEMEmailEditorCompCtrlTestClass {
     }
     public static void dataForCustomTemplateType(){
         User u = [SELECT id,name FROM User WHERE id = :userInfo.getUserid()];
-        u.HVEM_User__c = true;
-        update u;
         contactInstance = new Contact(LastName='TestClass', Email = 'abcd@xyz.com');
         insert contactInstance;
 
@@ -809,8 +793,6 @@ private class HVEMEmailEditorCompCtrlTestClass {
     }
     public static void setDataForChangeStatus(){
         User u = [SELECT id,name FROM User WHERE id = :userInfo.getUserid()];
-        u.HVEM_User__c = true;
-        update u;
         contactInstance = new Contact(LastName='TestClass', Email = 'testclasses@persistent.co.i');
         insert contactInstance;
         caseInstance = new Case(status='New',Origin='Phone',contactId=contactInstance.id);
@@ -872,8 +854,6 @@ private class HVEMEmailEditorCompCtrlTestClass {
      }
      public static void setDatacheckNextCasePresent(){
         User u = [SELECT id,name FROM User WHERE id = :userInfo.getUserid()];
-        u.HVEM_User__c = true;
-        update u;
         contactInstance = new Contact(LastName='TestClass', Email = 'testclasses@persistent.co.i');
         insert contactInstance;
         caseInstance = new Case(OwnerId = u.id,status='New',Origin='Phone',contactId=contactInstance.id);
@@ -916,8 +896,6 @@ private class HVEMEmailEditorCompCtrlTestClass {
     }
     public static void setDataSendAndNextNegative(){
         User u = [SELECT id,name FROM User WHERE id = :userInfo.getUserid()];
-        u.HVEM_User__c = true;
-        update u;
         contactInstance = new Contact(LastName='TestClass', Email = 'abcd@xyz.com');
         insert contactInstance;
 
@@ -980,8 +958,6 @@ private class HVEMEmailEditorCompCtrlTestClass {
     }
     public static void setDataSAveDraftElse(){
         User u = [SELECT id,name FROM User WHERE id = :userInfo.getUserid()];
-        u.HVEM_User__c = true;
-        update u;
         contactInstance = new Contact(LastName='TestClass', Email = 'abcd@xyz.com');
         insert contactInstance;
         caseInstance = new Case(status='New',Origin='Phone',contactId=contactInstance.Id);

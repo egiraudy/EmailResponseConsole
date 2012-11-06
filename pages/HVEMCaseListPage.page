@@ -28,17 +28,11 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <apex:page sidebar="false" controller="HVEMCaseListDetailsCtrl">
 
-    <apex:outputPanel id="idEnhancedList" rendered="{!$CurrentPage.parameters.isdtp==null || loggedUserInstance.HVEM_User__c==false}">
-        <apex:enhancedList type="Case" height="500" rowsPerPage="25" id="CaseList" customizable="true" />
-    </apex:outputPanel>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+    <apex:includeScript value="{!URLFOR($Resource.HVEMStaticResource,'/HVEM_StaticResource/JavaScript/HVEMCommon.js')}" />
 
-    <apex:outputPanel id="idHVEMCaseList" rendered="{!!($CurrentPage.parameters.isdtp==null || loggedUserInstance.HVEM_User__c==false)}">
-        <apex:includeScript value="/support/console/26.0/integration.js"/>
-        <apex:includeScript value="{!URLFOR($Resource.HVEMStaticResource,'/HVEM_StaticResource/JavaScript/HVEMCommon.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.HVEMStaticResource,'/HVEM_StaticResource/CSS/HVEMStyle.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.HVEMStaticResource,'/HVEM_StaticResource/CSS/HVEMCaseListDetailsStyle.css')}" />
 
-        <apex:stylesheet value="{!URLFOR($Resource.HVEMStaticResource,'/HVEM_StaticResource/CSS/HVEMStyle.css')}" />
-        <apex:stylesheet value="{!URLFOR($Resource.HVEMStaticResource,'/HVEM_StaticResource/CSS/HVEMCaseListDetailsStyle.css')}" />
-
-        <c:HVEMCaseList id="HVEMCaseListId" />
-    </apex:outputPanel>
+    <c:HVEMCaseList id="HVEMCaseListId" />
 </apex:page>

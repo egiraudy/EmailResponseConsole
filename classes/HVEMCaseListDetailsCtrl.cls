@@ -163,7 +163,7 @@ public with Sharing class HVEMCaseListDetailsCtrl {
             queueSobjIdList.add(queueInstance.Queue.Id);
         }
         loggedInUserQueueMap = new Map<Id,GroupMember>([SELECT Group.Name, Group.Id FROM GroupMember WHERE UserOrGroupId = : loggedUser AND Group.Type = 'Queue' AND Group.Id IN:queueSobjIdList ]);
-        loggedUserInstance = [SELECT Id,Name,HVEM_User__c FROM User WHERE Id = : loggedUser];
+        loggedUserInstance = [SELECT Id,Name FROM User WHERE Id = : loggedUser];
         if(loggedInUserQueueMap !=null && !loggedInUserQueueMap.isEmpty()){
             // generate List in comma seperated format to be used for "IN" clause in DBHelper instance
             Map<Id,GroupMember> queueIdMap = new Map<Id,GroupMember>();

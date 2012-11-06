@@ -57,7 +57,6 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
     </style>
 
     <script type="text/javascript">
-        var isHVEMUser = '{!activeUser.HVEM_User__c}';
         window.onload=function(){
             var pbs = document.getElementById('HVEMCaseConversationPageId:HVEMCaseConversationForm:com:HVEMCaseConversationComponentId:caseDetailPageBlockId:caseDetailPageBlockSectionId');
 
@@ -77,10 +76,8 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
                     }
                 }
             }
-            if(pbs != null && {!isServiceCloud}){
-                if('{!activeUser.HVEM_User__c}' == 'true'){
-                    twistSection(pbs.childNodes[0].childNodes[0]);
-                }
+            if(pbs != null){
+                twistSection(pbs.childNodes[0].childNodes[0]);
                 for(var i=1;i<=emailCount-1;i++){
                     var emailTemplate = document.getElementById('HVEMCaseConversationPageId:HVEMCaseConversationForm:com:HVEMCaseConversationComponentId:emailPageBlockId:emailRepeatId:'+i+':emailPageBlockSectionId');
                     twistSection(emailTemplate.childNodes[0].childNodes[0]);
@@ -96,15 +93,10 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
     <apex:pageBlock id="caseDetailPageBlockId">
         <apex:pageblockSection id="caseDetailPageBlockSectionId" columns="1"
             title="Case Details - {!caseInstance.CaseNumber}">
-            <apex:outputLink rendered="{!NOT(isServiceCloud)}"
-                style="white-space:nowrap;" title="Link" value="/apex/HVEMMainPage"
-                id="theLink"> {!$Label.Back_to_List_Cases} </apex:outputLink>
-            <apex:detail id="detailTag_Id" relatedList="{!!isServiceCloud}"
-                subject="{!caseInstance.id}" title="false" inlineEdit="false" />
         </apex:pageblockSection>
     </apex:pageBlock>
     <apex:pageBlock id="emailPageBlockId"
-        rendered="{!AND(activeUser.HVEM_User__c,isServiceCloud)}">
+        rendered="false">
         <apex:repeat id="emailRepeatId" value="{!emailMessageList}"
             var="emailMessage">
             <div class="hvemEmailItem"><apex:pageblockSection id="emailPageBlockSectionId" columns="1"

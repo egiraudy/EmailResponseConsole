@@ -107,7 +107,6 @@ public with Sharing class HVEMEmailEditorCompCtrl {
     public String rejectionComment{get;set;}
     public DraftEmailMessage__c lDraftEmailMessageInstance{get;set;}
     public boolean isTemplateDeleted{get;set;}
-    public boolean isServiceCloud{get;set;}
     public String type{get;set;}
     public List<EmailTemplate> emailTemplateList {get; set;}
 
@@ -124,7 +123,6 @@ public with Sharing class HVEMEmailEditorCompCtrl {
         dbHelper = new HVEMDBhelper();
         caseId = ApexPages.currentPage().getParameters().get('Id');
         String isDtpParam= ApexPages.currentPage().getParameters().get('isdtp');
-        isServiceCloud = false;
         orgIns  = new Organization();
         orgIns = [Select Id From Organization LIMIT 1];
         caseInstance = new Case();
@@ -147,12 +145,9 @@ public with Sharing class HVEMEmailEditorCompCtrl {
         // Get full user instance
         userName = UserInfo.getUserName();
         Id userId = UserInfo.getUserId();
-        activeUser = [Select Email,TimeZoneSidKey,HVEM_User__c From User where Id = : userId limit 1];
+        activeUser = [Select Email,TimeZoneSidKey From User where Id = : userId limit 1];
         userEmailAddress = activeUser.Email;
         configOptions = HVEM_Config_Options__c.getInstance('HVEM');
-        //if(isDtpParam != null && activeUser.HVEM_User__c == true){
-            isServiceCloud = true;
-        //}
         caseFromQueue = new Case();
         if(configOptions != null){
             selectedTemplate = configOptions.Default_Email_Template__c;

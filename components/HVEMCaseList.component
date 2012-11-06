@@ -45,7 +45,6 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
             var selectedCaseId = '{!caseId}';
             var currentCase = '';
             var finalQueueId = '{!finalQueueId}';
-            var isHVEMUser = '{!loggedUserInstance.HVEM_User__c}';
 
             function openCaseDetailsPrimaryTab(type){
                 if(type == 'queue' && {!casesInQueueList.size} == 0){

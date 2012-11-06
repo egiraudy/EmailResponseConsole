@@ -200,7 +200,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
             sforce.console.addEventListener('hvemInsertInEditor', eventInsertInEditor);
         }
     </script>
-    <apex:outputPanel id="errorPanel" rendered="{!isServiceCloud}">
+    <apex:outputPanel id="errorPanel">
         <apex:pageMessages />
         <apex:pageMessage id="bodyBlankErrorId" rendered="{!bodyBlankError}"
             severity="error" strength="2"
@@ -308,7 +308,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
             oncomplete="handleTabs();"
             rerender="idEditorPanel,idToAddressPanel,idNoCaseinQueuePanel,spanId,errorPanel"/>
 
-    <apex:outputPanel id="idfullBodyPanel" rendered="{!isServiceCloud}">
+    <apex:outputPanel id="idfullBodyPanel">
         <table class="hvemPubTable" width="100%;">
             <tr>
                 <td align="right"><apex:outputLabel style="margin:3px;font-weight:bold;" value="{!$Label.Subject}" />
@@ -494,16 +494,6 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
             </tr>
         </table>
     </apex:outputPanel>
-    <apex:outputPanel id="caseDetailSection"
-        rendered="{!IF(isServiceCloud ==true,false,true)}">
-        <table>
-            <tr id="detailTDId">
-                <td><apex:detail id="detailTag_Id" title="false"
-                    relatedListHover="true" relatedList="true"
-                    subject="{!caseInstance.id}" /></td>
-            </tr>
-        </table>
-    </apex:outputPanel>
     <apex:outputPanel id="idNoCaseinQueuePanel" style="display:none;">
         <apex:pageMessage id="ChangeStatusId" rendered="{!statusChanged}"
             severity="info" strength="2"
@@ -584,60 +574,54 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
         var templateType = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:templateType').value;
         var editorTextValue = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:textValue').value;
         var previousEmailTemplate = templateType;
-        var isHVEMUser = '{!activeUser.HVEM_User__c}';
-        var inConsole = testIsInConsole();
-        if(isHVEMUser == 'true' && inConsole == 1){
-            if(templateType == 'custom'){
-                var editor = CKEDITOR.replace( 'nameMainEmailBody' );
-                CKEDITOR.instances.idMainEmailBody.setData('');
-                // Decode the now encoded text
-                var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,false);
-                decoded = decoded.replace('<![CDATA[', '');
-                decoded = decoded.replace(']]>', '');
-                decoded = trim(decoded.replace( '<p>', '' ));
-                decoded = trim(decoded.replace( '</p>', '' ));
-                CKEDITOR.instances.idMainEmailBody.setData(decoded);
-            }else{
-                editorTextValue = editorTextValue.replace(/<br\/>/g, "\n");
-                var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,true);
-                decoded = decoded.replace('<![CDATA[', '');
-                decoded = decoded.replace(']]>', '');
-                if(inConsole == 1){
-                    document.getElementById('idMainEmailBody').value = editorTextValue;
-                }
+        if(templateType == 'custom'){
+            var editor = CKEDITOR.replace( 'nameMainEmailBody' );
+            CKEDITOR.instances.idMainEmailBody.setData('');
+            // Decode the now encoded text
+            var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,false);
+            decoded = decoded.replace('<![CDATA[', '');
+            decoded = decoded.replace(']]>', '');
+            decoded = trim(decoded.replace( '<p>', '' ));
+            decoded = trim(decoded.replace( '</p>', '' ));
+            CKEDITOR.instances.idMainEmailBody.setData(decoded);
+        }else{
+            editorTextValue = editorTextValue.replace(/<br\/>/g, "\n");
+            var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,true);
+            decoded = decoded.replace('<![CDATA[', '');
+            decoded = decoded.replace(']]>', '');
+            if(inConsole == 1){
+                document.getElementById('idMainEmailBody').value = editorTextValue;
             }
         }
 
         window.onload=function(){
-            if(inConsole == 1 && isHVEMUser == 'true'){
-                var templateSelectList = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:emailTemplateId');
+            var templateSelectList = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:emailTemplateId');
 
-                for(var i=(templateSelectList.options.length - 1);i>=0;i--){
-                     if(templateSelectList .options[i].disabled == true){
-                        templateSelectList .options[i].className = 'Fontbolder';
-                    }
+            for(var i=(templateSelectList.options.length - 1);i>=0;i--){
+                 if(templateSelectList .options[i].disabled == true){
+                    templateSelectList .options[i].className = 'Fontbolder';
                 }
-                var saveLink = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:SaveId');
-                var discardLink = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:DiscardId');
-                if('{!configOptions.Allow_Drafts__c}' == 'true'){
-                    if('{!isActiveStatus}' != 'true' ){
-                        discardLink.style.display = 'none';
-                        document.getElementById('discardChangesSpan').style.display='inline';
-                    }
-               }
-               if('{!isUnderApproval}' == 'true'){
-                   if('{!configOptions.Allow_Drafts__c}' == 'true'){
-                       discardLink.style.display = 'none';
-                       document.getElementById('discardChangesSpan').style.display='inline';
-                   }
-               }else if('{!isUnderApproval}' == 'false'){
-               }
-               if(templateType == 'custom' && '{!isUnderApproval}' == 'true'){
-                   CKEDITOR.instances.idMainEmailBody.setReadOnly(true);
-               }else if('{!isUnderApproval}' == 'true'){
-                   document.getElementById('idMainEmailBody').disabled = true;
-               }
             }
+            var saveLink = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:SaveId');
+            var discardLink = document.getElementById('HVEMEmailEditorPublishierPageId:HVEMEmailPublisierForm:com1:hvemEmailEditoComponentId:DiscardId');
+            if('{!configOptions.Allow_Drafts__c}' == 'true'){
+                if('{!isActiveStatus}' != 'true' ){
+                    discardLink.style.display = 'none';
+                    document.getElementById('discardChangesSpan').style.display='inline';
+                }
+           }
+           if('{!isUnderApproval}' == 'true'){
+               if('{!configOptions.Allow_Drafts__c}' == 'true'){
+                   discardLink.style.display = 'none';
+                   document.getElementById('discardChangesSpan').style.display='inline';
+               }
+           }else if('{!isUnderApproval}' == 'false'){
+           }
+           if(templateType == 'custom' && '{!isUnderApproval}' == 'true'){
+               CKEDITOR.instances.idMainEmailBody.setReadOnly(true);
+           }else if('{!isUnderApproval}' == 'true'){
+               document.getElementById('idMainEmailBody').disabled = true;
+           }
         }
     </script>
 
