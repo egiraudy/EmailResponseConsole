@@ -150,9 +150,9 @@ public with Sharing class HVEMEmailEditorCompCtrl {
         activeUser = [Select Email,TimeZoneSidKey,HVEM_User__c From User where Id = : userId limit 1];
         userEmailAddress = activeUser.Email;
         configOptions = HVEM_Config_Options__c.getInstance('HVEM');
-        if(isDtpParam != null && activeUser.HVEM_User__c == true){
+        //if(isDtpParam != null && activeUser.HVEM_User__c == true){
             isServiceCloud = true;
-        }
+        //}
         caseFromQueue = new Case();
         if(configOptions != null){
             selectedTemplate = configOptions.Default_Email_Template__c;
