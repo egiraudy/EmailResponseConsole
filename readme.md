@@ -35,6 +35,11 @@ ERC is available on the AppExchange both as a managed and an un-managed package.
 Version History
 ---------------
 
+*Next Version Next - AppExchange Release: TBD*
+
+- ERC as a Case Feed custom publisher (work in progress)
+
+
 *Version 3.5 - AppExchange Release: 2012/10/31*
 
 - Updated the packaging with sample app, tab, layout, etc. for an easier trial type installation
