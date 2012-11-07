@@ -71,14 +71,14 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
             margin-right: 1px;
             position: relative;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: normal;
+            font-size: 11px;
+            font-weight: bold;
             color: black;
             cursor: pointer;
-            background: grey;
+            //background: grey;
         }
 
-        .#menuOptions {
+        #menuOptions {
             background-color: #ffffff;
             border: 1px solid;
             border-color: #B5B5B5 #B5B5B5 #7F7F7F;
@@ -151,7 +151,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
         #menuOptions {
             display: none;
             position: absolute;
-            bottom: 18px;
+            bottom: 17px;
             right: 2px;
             width:135px;
         }​
@@ -464,7 +464,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
                                         onclick="return false;"
                                         oncomplete="return false;"/>
                                 <!-- span class="btn" style="padding: 4px;">▼</span -->
-                                <span id="menuOptions">
+                                <span id="menuOptions" class="btn">
                                     <apex:outputPanel rendered="{!If(enableChangeCaseStatus, true,false)}">
                                         <span onmouseover="populateMouseVar('in','changeCaseId');"
                                                 onmouseout="populateMouseVar('out','changeCaseId')" id="changeCaseId" class="dropdownSelection"
@@ -589,9 +589,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
             var decoded = HVEMApp.Util.String.unescapeHtml(editorTextValue,true);
             decoded = decoded.replace('<![CDATA[', '');
             decoded = decoded.replace(']]>', '');
-            if(inConsole == 1){
-                document.getElementById('idMainEmailBody').value = editorTextValue;
-            }
+            document.getElementById('idMainEmailBody').value = editorTextValue;
         }
 
         window.onload=function(){
@@ -687,12 +685,10 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
         }
 
         function populateMouseVar(type,CaseId){
-            if(inConsole == 1){
-                if(type == 'out'){
-                    document.getElementById(CaseId).className='removeHighLight';
-                }else if(type == 'in'){
-                    document.getElementById(CaseId).className='highLightSelection';
-                }
+            if(type == 'out'){
+                document.getElementById(CaseId).className='removeHighLight';
+            }else if(type == 'in'){
+                document.getElementById(CaseId).className='highLightSelection';
             }
         }
         function saveDiscardLink(){
