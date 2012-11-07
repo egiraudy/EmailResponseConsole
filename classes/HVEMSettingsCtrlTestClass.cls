@@ -133,8 +133,6 @@ private class HVEMSettingsCtrlTestClass {
         hvemSettings.getCasePickListFieldsValues();
         hvemSettings.getCaseStatusFieldValues();
         hvemSettings.getCaseFilterMapEntry();
-        List<selectOption> articleTypeList = hvemSettings.getArticleTypesDevName();
-        System.assertEquals(true,articleTypeList.size() > 0);
         List<selectOption> optionList = hvemSettings.getSavedOptions();
         System.assertEquals(true,optionList.size() > 0);
         List<selectOption> optionList1 = hvemSettings.getPublicGroups();

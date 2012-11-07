@@ -771,19 +771,6 @@ public with Sharing class HVEMSettingsCtrl{
      /**
       * Function to add options to the articleTypes MultiSelectList
       */
-     public List<SelectOption> getArticleTypesDevName()
-     {
-         List<SelectOption> options = new List<SelectOption>();
-         List<Schema.SObjectType> gd = Schema.getGlobalDescribe().Values();
-
-         for(Schema.SObjectType f : gd)
-         {
-             if (f.getDescribe().getName().endsWith('__kav')) {
-                 options.add(new SelectOption(f.getDescribe().getName(),f.getDescribe().getLabel()));
-             }
-         }
-         return options;
-     }
 
      /**
       * Function to initialize the dependent picklist at load time

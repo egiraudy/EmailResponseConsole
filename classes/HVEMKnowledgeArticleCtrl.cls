@@ -44,7 +44,7 @@ public with Sharing class HVEMKnowledgeArticleCtrl{
     public String articleTypesForFilter{get;set;}
     public String categoryGroupsForFilter{get;set;}
     private static final String NON_BREAKING_SPACE = '&nbsp;&nbsp;';
-    private final String KNOWLEDGEARTICLES = 'KnowledgeArticleVersion';
+    //private final String KNOWLEDGEARTICLES = 'KnowledgeArticleVersion';
     public String selectedKnowledgeArticleURL{get;set;}
     public String selectedKnowledgeArticleLanguage{get;set;}
     public String selectedKnowledgeArticleFrameSource{get;set;}
@@ -207,27 +207,7 @@ public with Sharing class HVEMKnowledgeArticleCtrl{
         }
     }
 
-    /**
-     * Function to get the Article Types.
-     */
-    public List<SelectOption> getArticleTypesDevName()
-    {
-        List<SelectOption> options = new List<SelectOption>();
-        List<Schema.SObjectType> gd = Schema.getGlobalDescribe().Values();
 
-        for(Schema.SObjectType f : gd)
-        {
-            if (f.getDescribe().getName().endsWith('__kav')) {
-                for(String articleTypesInSettings : articleTypeDisplayList){
-                    if(f.getDescribe().getName() == articleTypesInSettings){
-                        options.add(new SelectOption(f.getDescribe().getName(),f.getDescribe().getLabel()));
-
-                    }
-                }
-            }
-        }
-        return options;
-    }
     /**
      * Function to prepare Data Category String for query
      */
@@ -243,8 +223,7 @@ public with Sharing class HVEMKnowledgeArticleCtrl{
             if((withDataCategoryClause != null) && (withDataCategoryClause != '')){
                 withDataCategoryClause = Label.Data_category + '  ' +  withDataCategoryClause;
             }
-        }
-        catch(Exception e){
+        } catch(Exception e){
             ApexPages.addMessages(e);
         }
     }

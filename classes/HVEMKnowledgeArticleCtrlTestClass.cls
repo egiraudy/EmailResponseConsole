@@ -128,7 +128,6 @@ private class HVEMKnowledgeArticleCtrlTestClass {
         insert caseInstance;
         ApexPages.currentPage().getParameters().put('Id',caseInstance.Id);
         HVEMKnowledgeArticleCtrlInstance = new HVEMKnowledgeArticleCtrl();
-        HVEMKnowledgeArticleCtrlInstance.getArticleTypesDevName();
         System.assertEquals(caseInstance.id,HVEMKnowledgeArticleCtrlInstance.caseId);
         HVEMKnowledgeArticleCtrlInstance.IsVisiblePKB = true;
         HVEMKnowledgeArticleCtrlInstance.IsVisiblePRM  = true;
@@ -160,7 +159,6 @@ private class HVEMKnowledgeArticleCtrlTestClass {
         ApexPages.currentPage().getParameters().put('Id',caseInstance.Id);
         HVEMKnowledgeArticleCtrlInstance = new HVEMKnowledgeArticleCtrl();
         System.assertEquals(caseInstance.id,HVEMKnowledgeArticleCtrlInstance.caseId);
-        HVEMKnowledgeArticleCtrlInstance.getArticleTypesDevName();
 
         kaID = createArticle();
         caseID = createCase();
