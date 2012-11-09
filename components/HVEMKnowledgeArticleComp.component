@@ -329,8 +329,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 
             sforce.console.addEventListener('hvemKbUp', eventGoUp);
             sforce.console.addEventListener('hvemKbDown', eventGoDown);
-            sforce.console.addEventListener('hvemKbInsertLink', eventInsertArticleLink);
-            sforce.console.addEventListener('hvemKbInsertContent', eventInsertArticleContent);
+            sforce.console.addEventListener('hvemKbInsertArticle', eventInsertArticle);
         }
         var setEnclosingTabId = function(result) {
             enclosingTabId = result.id;
