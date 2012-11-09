@@ -207,6 +207,24 @@ public with Sharing class HVEMKnowledgeArticleCtrl{
         }
     }
 
+    /**
+     * Function to get the Article Types.
+     */
+    public List<SelectOption> getArticleTypesDevName() {
+        List<SelectOption> options = new List<SelectOption>();
+        List<Schema.SObjectType> gd = Schema.getGlobalDescribe().Values();
+
+        for(Schema.SObjectType f : gd) {
+            if (f.getDescribe().getName().endsWith('__kav')) {
+                for(String articleTypesInSettings : articleTypeDisplayList){
+                    if(f.getDescribe().getName() == articleTypesInSettings){
+                        options.add(new SelectOption(f.getDescribe().getName(),f.getDescribe().getLabel()));
+                    }
+                }
+            }
+        }
+        return options;
+    }
 
     /**
      * Function to prepare Data Category String for query
@@ -217,13 +235,13 @@ public with Sharing class HVEMKnowledgeArticleCtrl{
                 List<String> CategoryGroupDataCategoryList = singleGroupCategoryCombination.split(':',2);
                 withDataCategoryClause += CategoryGroupDataCategoryList[0] +'__c ABOVE_OR_BELOW ' + CategoryGroupDataCategoryList[1] + '__c AND ';
             }
-            if(withDataCategoryClause.endsWith(' AND ')){
+            if(withDataCategoryClause.endsWith(' AND ')) {
                 withDataCategoryClause = withDataCategoryClause.subString(0,(withDataCategoryClause.length()-4));
             }
-            if((withDataCategoryClause != null) && (withDataCategoryClause != '')){
+            if((withDataCategoryClause != null) && (withDataCategoryClause != '')) {
                 withDataCategoryClause = Label.Data_category + '  ' +  withDataCategoryClause;
             }
-        } catch(Exception e){
+        } catch(Exception e) {
             ApexPages.addMessages(e);
         }
     }

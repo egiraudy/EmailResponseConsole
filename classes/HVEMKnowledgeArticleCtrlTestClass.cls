@@ -129,6 +129,8 @@ private class HVEMKnowledgeArticleCtrlTestClass {
         ApexPages.currentPage().getParameters().put('Id',caseInstance.Id);
         HVEMKnowledgeArticleCtrlInstance = new HVEMKnowledgeArticleCtrl();
         System.assertEquals(caseInstance.id,HVEMKnowledgeArticleCtrlInstance.caseId);
+        List<selectOption> articleTypeList = HVEMKnowledgeArticleCtrlInstance.getArticleTypesDevName();
+        System.assertEquals(true,articleTypeList.size() > 0);
         HVEMKnowledgeArticleCtrlInstance.IsVisiblePKB = true;
         HVEMKnowledgeArticleCtrlInstance.IsVisiblePRM  = true;
         HVEMKnowledgeArticleCtrlInstance.IsVisibleCSP  = true;
@@ -159,6 +161,8 @@ private class HVEMKnowledgeArticleCtrlTestClass {
         ApexPages.currentPage().getParameters().put('Id',caseInstance.Id);
         HVEMKnowledgeArticleCtrlInstance = new HVEMKnowledgeArticleCtrl();
         System.assertEquals(caseInstance.id,HVEMKnowledgeArticleCtrlInstance.caseId);
+        List<selectOption> articleTypeList = HVEMKnowledgeArticleCtrlInstance.getArticleTypesDevName();
+        System.assertEquals(true,articleTypeList.size() > 0);
 
         kaID = createArticle();
         caseID = createCase();
